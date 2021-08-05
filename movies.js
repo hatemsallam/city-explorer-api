@@ -1,12 +1,20 @@
 'use strict';
 const axios = require('axios');
 const movies = {}
-
+let myMemory = {};
 
 movies.getMoviesHandler = async function  (req,res) {
     const city = req.query.cityname;
-        
-        const url = `
+
+
+    if(myMemory[city] !== undefined) 
+    {
+      console.log('get the data from the Memory');
+      res.send(myMemory[city]);
+    }
+
+    else
+    { const url = `
         
     https://api.themoviedb.org/3/search/movie?api_key=${process.env.MOVIE_API_KEY}&query=${city}`;
     
@@ -35,6 +43,10 @@ movies.getMoviesHandler = async function  (req,res) {
     
         moviesobj.map(element => {
     
+            myMemory[city] = movieslistObj;
+
+            console.log('get the data from the API');
+
             const title = element.title;
     
     
@@ -63,7 +75,13 @@ movies.getMoviesHandler = async function  (req,res) {
     
         return movieslistObj;
     
-    };
+    }; 
+
+}
+
+
+
+       
     
     
     class Movies {
